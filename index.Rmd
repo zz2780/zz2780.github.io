@@ -4,7 +4,6 @@ output:
   html_document:
     toc: true
     toc_float: true
-    theme: cerulean
 ---
 
 ## Welcome to my Website
@@ -14,3 +13,5 @@ I am a second-year MPH student at Columbia.
 This is the boss of our family.
 
 <img src="images/image.jpeg" style="width:75%">
+
+
