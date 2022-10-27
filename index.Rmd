@@ -10,8 +10,16 @@ output:
 
 I am a second-year MPH student at Columbia.
 
+Please see me resume [here](about.html).
+
 This is the boss of our family.
 
 <img src="images/image.jpeg" style="width:75%">
+
+# Link to Other Websites
+
+[My Github](https://github.com/zz2780)
+
+[Midterm Project](https://github.com/zz2780/p8105_mtp_zz2780)
 
 
