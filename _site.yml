@@ -4,7 +4,7 @@ navbar:
   title: "Home"
   right:
     - text: "About"
-      href: about.html
+      href: About.html
     - text: "Plotly"
       href: flexdashboard.html
     - icon: fa-envelope fa-lg
