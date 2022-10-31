@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    source: embed
 ---
 
 ```{r setup, include=FALSE}
@@ -13,8 +14,10 @@ library(tidyverse)
 library(plotly)
 ```
 
-The data is cleaned and subset to U.S. bases with data entry in winter (Dec-Feb) from 2000 to 2010 
+
+
 ```{r}
+#The data is cleaned and subset to weather station with data entry in winter (Dec-Feb) from 2000 to 2010 
 data("ny_noaa")
 
 ny_noaa=ny_noaa%>%
@@ -36,21 +39,9 @@ ny_noaa=ny_noaa%>%
 ```
 
 
- {data-width=650}
+Column {data-width=650}
 -----------------------------------------------------------------------
-
-### Boxplot
-
-```{r, warning=FALSE}
-ny_noaa%>%
-  mutate(id = fct_reorder(id, snwd))%>%
-  plot_ly(color=~id, y=~snwd, type="box", colors="viridis")
-```
-
-{data-width=350}
------------------------------------------------------------------------
-
-### Barplot
+### Average Percipitation during Winter 2000-2010
 
 ```{r, warning=FALSE}
 ny_noaa %>% 
@@ -58,15 +49,28 @@ ny_noaa %>%
   na.omit()%>%
   summarise(avg_prcp=mean(prcp))%>%
   mutate(id = fct_reorder(id, avg_prcp))%>%
-  plot_ly(x=~id, y=~avg_prcp, color=~id, type="bar", mode="markers")
+  plot_ly(x=~id, y=~avg_prcp, color=~id, type="bar", mode="markers")%>%
+  layout(xaxis=list(title="Weather Station ID"), yaxis=list(title="Average Percipitation"))
 ```
 
-### Scatterplot
+Column {data-width=350}
+-----------------------------------------------------------------------
+### Yearly Distribution of Snow Depth from 2000 to 2010
+
+```{r, warning=FALSE}
+ny_noaa%>%
+  plot_ly(x=~year, y=~snwd, type="box", colors="viridis")%>%
+  layout(xaxis=list(title="Year"), yaxis=list(title="Snow Depth"))
+```
+
+
+### Temperatue Range and Snowfall
 
 ```{r, warning=FALSE}
 ny_noaa %>% 
   group_by(id)%>%
   na.omit()%>%
   summarise(avg_tmin=mean(tmin), avg_tmax=mean(tmax), avg_snowfall=mean(snow))%>%
-  plot_ly(x=~avg_tmin, y=~avg_tmax, color=~avg_snowfall, type="scatter", mode="markers")
+  plot_ly(x=~avg_tmin, y=~avg_tmax, color=~avg_snowfall, type="scatter", mode="markers")%>%
+  layout(xaxis=list(title="Average Min Temperature"), yaxis=list(title="Average Max Temperature"))
 ```
