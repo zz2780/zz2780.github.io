@@ -10,7 +10,7 @@ output:
 
 I am a second-year MPH student at Columbia.
 
-Please see me resume [here](about.html).
+Please see me resume [here](About.html).
 
 This is the boss of our family.
 
