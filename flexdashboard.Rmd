@@ -1,0 +1,72 @@
+---
+title: "Flexdashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(p8105.datasets)
+library(tidyverse)
+library(plotly)
+```
+
+The data is cleaned and subset to U.S. bases with data entry in winter (Dec-Feb) from 2000 to 2010 
+```{r}
+data("ny_noaa")
+
+ny_noaa=ny_noaa%>%
+  janitor::clean_names()%>%
+  filter(
+    !is.na(tmin),
+    !is.na(tmax)
+  )%>%
+  separate(date, into=c("year","month","day"))%>%
+  mutate(tmin=as.numeric(tmin), 
+         tmax=as.numeric(tmax),
+         tmin=tmin/10, 
+         tmax=tmax/10,
+         prcp=prcp/10,
+         year=as.numeric(year),
+         month=tolower(month.abb[as.numeric(month)]))%>%
+  filter(year %in% 2000:2010,
+         month %in% c("dec", "jan", "feb"))
+```
+
+
+ {data-width=650}
+-----------------------------------------------------------------------
+
+### Boxplot
+
+```{r, warning=FALSE}
+ny_noaa%>%
+  mutate(id = fct_reorder(id, snwd))%>%
+  plot_ly(color=~id, y=~snwd, type="box", colors="viridis")
+```
+
+{data-width=350}
+-----------------------------------------------------------------------
+
+### Barplot
+
+```{r, warning=FALSE}
+ny_noaa %>% 
+  group_by(id)%>%
+  na.omit()%>%
+  summarise(avg_prcp=mean(prcp))%>%
+  mutate(id = fct_reorder(id, avg_prcp))%>%
+  plot_ly(x=~id, y=~avg_prcp, color=~id, type="bar", mode="markers")
+```
+
+### Scatterplot
+
+```{r, warning=FALSE}
+ny_noaa %>% 
+  group_by(id)%>%
+  na.omit()%>%
+  summarise(avg_tmin=mean(tmin), avg_tmax=mean(tmax), avg_snowfall=mean(snow))%>%
+  plot_ly(x=~avg_tmin, y=~avg_tmax, color=~avg_snowfall, type="scatter", mode="markers")
+```
